@@ -1,0 +1,236 @@
+export class Math {
+    init() {
+
+    }
+    // Basic Arithmetic
+    class add(a, b) {
+        return a + b;
+    }
+
+    class subtract(a, b) {
+        return a - b;
+    }
+
+    class multiply(a, b) {
+        return a * b;
+    }
+
+    class divide(a, b) {
+        if (b == 0)  error("Division by zero.");
+        return a / b;
+    }
+
+    class mod(a, b) {
+        return a % b;
+    }
+
+    // Power and Root Functions
+    class square(n) {
+        return n * n;
+    }
+
+    class sqrt(n) {
+        if (n < 0) {
+            print("Cannot sqrt negative numbers");
+            return nil;
+        } //throw new Error("Square root of negative number.");
+        return this.sqrtHelper(n);
+    }
+
+    // Helper function to compute square root (basic Newton's method)
+    class sqrtHelper(n) {
+        var approx = n / 2.0;
+        var betterApprox;
+        for (var i = 0; i < 10; i = i + 1) {
+            betterApprox = 0.5 * (approx + n / approx);
+            approx = betterApprox;
+        }
+        return betterApprox;
+    }
+
+    class pow(base, exp) {
+        var result = 1;
+        for (var i = 0; i < exp; i = i + 1) {
+            result = result * base;
+        }
+        return result;
+    }
+
+    class exp(n) {
+        return this.pow(this.E, n);
+    }
+
+    class log(n) {
+        if (n <= 0) {
+            print("Cannot take Logarithm of non-positive number");
+            return nil;
+        }// throw new Error("Logarithm of non-positive number.");
+        return this.logHelper(n);
+    }
+
+    // Helper function to compute natural log (simple approximation)
+    class logHelper(n) {
+        var sum = 0.0;
+        for (var i = 0; i < 100; i = i + 1) {
+            sum = sum + (this.pow((n - 1), i + 1) / (i + 1)) * this.pow(-1, i);
+        }
+        return sum;
+    }
+
+    class log10(n) {
+        return this.log(n) / this.LN10;
+    }
+
+    // Trigonometric Functions
+    class sin(angle) {
+        return this.sinHelper(angle);
+    }
+
+    // Helper function for sine (Taylor series approximation)
+    class sinHelper(angle) {
+        var sum = 0.0;
+        for (var i = 0; i < 10; i = i + 1) {
+            sum = sum + this.pow(-1, i) * this.pow(angle, 2 * i + 1) / this.factorial(2 * i + 1);
+        }
+        return sum;
+    }
+
+    class cos(angle) {
+        return this.sinHelper(this.PI / 2 - angle);
+    }
+
+    class tan(angle) {
+        return this.sin(angle) / this.cos(angle);
+    }
+
+    class asin(value) {
+        // Simple inverse sine approximation (based on power series)
+        return this.asinHelper(value);
+    }
+
+    class asinHelper(value) {
+        var sum = value;
+        var factor = value;
+        for (var i = 1; i < 10; i = i + 1) {
+            factor = factor * value * value;
+            sum = sum + factor * this.factorial2(2 * i) / (2 * i + 1);
+        }
+        return sum;
+    }
+
+    class acos(value) {
+        return this.PI / 2 - this.asin(value);
+    }
+
+    class atan(value) {
+        // Approximation for arctangent (simple form)
+        return this.atanHelper(value);
+    }
+
+    class atanHelper(value) {
+        var sum = 0.0;
+        for (var i = 0; i < 10; i = i + 1) {
+            sum = sum + this.pow(-1, i) * this.pow(value, 2 * i + 1) / (2 * i + 1);
+        }
+        return sum;
+    }
+
+    // Hyperbolic Functions
+    class sinh(x) {
+        return (this.exp(x) - this.exp(-x)) / 2;
+    }
+
+    class cosh(x) {
+        return (this.exp(x) + this.exp(-x)) / 2;
+    }
+
+    class tanh(x) {
+        return this.sinh(x) / this.cosh(x);
+    }
+
+    // Rounding Functions
+    class floor(n) {
+        return n | 0; // Bitwise OR to truncate towards zero
+    }
+
+    class ceil(n) {
+        return n == this.floor(n) ? n : this.floor(n) + 1;
+    }
+
+    class round(n) {
+        return n - this.floor(n) < 0.5 ? this.floor(n) : this.ceil(n);
+    }
+
+    class abs(n) {
+        return n < 0 ? -n : n;
+    }
+
+    // Factorial
+    class factorial(n) {
+        if (n == 0) return 1;
+        if (n == 1) return 1;
+        var result = 1;
+        for (var i = 2; i <= n; i = i + 1) {
+            result = result * i;
+        }
+        return result;
+    }
+
+    // Factorial for odd numbers (used in sin approximation)
+    class factorial2(n) {
+        var result = 1;
+        for (var i = 3; i <= n; i = i + 2) {
+            result = result * i;
+        }
+        return result;
+    }
+
+    // Random Numbers
+    class random() {
+            // If seed is 0, initialize it with the current time
+            return this.randomHelper();
+        }
+
+        // Modified Linear Congruential Generator (LCG) for randomness
+    class randomHelper() {
+        var a = 1664525;
+        var c = 1013904223;
+        var m = 2 ^ 32; // 2 ^ 32, using bitwise left shift for large number
+
+        var seed = (a * clock() + c) % m;
+        return seed / m;
+    }
+
+    class toRadians(deg) {
+        return deg * this.RADIANS_TO_DEGREES;
+    }
+
+    class toDegrees(rad) {
+        return rad * this.DEGREES_TO_RADIANS;
+    }
+
+    class max(a, b) {
+        return (a >= b) ? a : b;
+    }
+
+    class min(a, b) {
+        return (a <= b) ? a : b;
+    }
+
+    class clamp(value, min, max) {
+            if (min > max) {
+                error(min + " > " + max);
+            }
+            return this.min(max, this.max(value, min));
+        }
+
+}
+
+Math.PI = 3.141592653589793;
+Math.E = 2.718281828459045;
+Math.LN10 = 2.302585092994046;
+Math.SQRT2 = 1.4142135623730951;
+Math.SQRT1_2 = 0.7071067811865476;
+Math.RADIANS_TO_DEGREES = 0.017453292519943295;
+Math.DEGREES_TO_RADIANS = 57.29577951308232;
+Math.TAU = 2.0 * Math.PI;

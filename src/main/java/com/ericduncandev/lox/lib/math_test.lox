@@ -1,0 +1,10 @@
+// math_test.lox
+
+// import "math_utils.lox";
+import "string_utils.lox";
+
+fun main() {
+    print(StringUtils.isNumeric("alkdjf"));
+}
+
+main();
